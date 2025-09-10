@@ -4,12 +4,12 @@ const DELIM = "\t";
 // Small cleanup for Notes
 const clean = s => String(s ?? "").replace(/\t/g, " ").trim();
 
-// Build HTML row (NO notes cell)
+// Build HTML row (with notes button)
 function rowHTML(r){
   return `
     <tr data-notes="${clean(r.Notes)}">
-    <td></td> <!-- expand control cell -->  
-    <td class="center">${r.Rank ?? ""}</td>
+      <td></td> <!-- expand control cell -->  
+      <td class="center">${r.Rank ?? ""}</td>
       <td>${r.Name ?? ""}</td>
       <td class="center">${r.Position ?? ""}</td>
       <td>${r.Usage ?? ""}</td>
@@ -22,7 +22,6 @@ function rowHTML(r){
   `;
 }
 
-// Parse file, render table, wire expand
 Papa.parse(FILE, {
   download: true,
   header: true,
@@ -35,10 +34,15 @@ Papa.parse(FILE, {
     const tbody = document.querySelector('#board tbody');
     tbody.innerHTML = rows.map(rowHTML).join('');
 
+    // Destroy previous DataTable if exists
+    if ($.fn.DataTable.isDataTable('#board')) {
+      $('#board').DataTable().destroy();
+    }
+
     const table = new DataTable('#board', {
       paging: true, pageLength: 25, lengthChange: false,
       searching: true, ordering: true, info: false,
-      order: [[1,'asc']], // col 0 is expand control
+      order: [[1,'asc']],
       columnDefs: [
         { targets: 0, orderable: false, className: 'details-control' },
         { targets: [1,3], className: 'center' }
@@ -51,29 +55,29 @@ Papa.parse(FILE, {
       return `<div class="dt-notes">${notes}</div>`;
     };
 
-    document.querySelector('#board tbody').addEventListener('click', (e) => {
+    tbody.addEventListener('click', (e) => {
+      // Expand control
       const cell = e.target.closest('td.details-control');
-      if (!cell) return;
-      const tr = cell.closest('tr');
-      const row = table.row(tr);
-
-      if (row.child.isShown()) {
-        row.child.hide(); tr.classList.remove('shown');
-      } else {
-        row.child(formatNotes(tr)).show(); tr.classList.add('shown');
+      if (cell) {
+        const tr = cell.closest('tr');
+        const row = table.row(tr);
+        if (row.child.isShown()) {
+          row.child.hide(); tr.classList.remove('shown');
+        } else {
+          row.child(formatNotes(tr)).show(); tr.classList.add('shown');
+        }
+        return;
+      }
+      // View Notes button
+      const btn = e.target.closest('.view-notes-btn');
+      if (btn) {
+        const notes = btn.getAttribute('data-notes') || 'No notes yet.';
+        document.getElementById('notes-content').textContent = notes;
+        document.getElementById('notes-modal').style.display = 'block';
       }
     });
   },
   error: (err) => { console.error(err); alert('Failed to load data'); }
-});
-
-document.querySelector('#board tbody').addEventListener('click', (e) => {
-  const btn = e.target.closest('.view-notes-btn');
-  if (btn) {
-    const notes = btn.getAttribute('data-notes') || 'No notes yet.';
-    document.getElementById('notes-content').textContent = notes;
-    document.getElementById('notes-modal').style.display = 'block';
-  }
 });
 
 // Close modal
