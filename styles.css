@@ -40,3 +40,32 @@ th {
 tr:hover {
   background: #2a2a2a;
 }
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #333;
+  color: #ffd700;
+  padding: 30px;
+  border-radius: 8px;
+  z-index: 1000;
+  min-width: 300px;
+  max-width: 600px;
+}
+
+.close-x {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  color: #ffd700;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-x:hover {
+  color: #fff;
+}

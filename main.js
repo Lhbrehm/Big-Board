@@ -64,6 +64,6 @@ Papa.parse(FILE, {
 });
 
 // Close modal
-document.getElementById('close-notes').addEventListener('click', () => {
+document.querySelector('.close-x').addEventListener('click', () => {
   document.getElementById('notes-modal').style.display = 'none';
 });
