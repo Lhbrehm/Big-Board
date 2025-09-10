@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Draft Big Board</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f4f4; }
+    h1 { text-align:center; margin-top:20px; }
+    .container { width:80%; max-width:1100px; margin:20px auto; background:white; padding:20px; border-radius:8px; }
+    table { width:100%; }
+  </style>
+</head>
+<body>
+  <h1>Draft Big Board</h1>
+  <div class="container">
+    <table id="board" class="display">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Pos</th>
+          <th>School</th>
+          <th>Overall</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- jQuery + DataTables + PapaParse -->
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <!-- our logic -->
+  <script src="main.js"></script>
+</body>
+</html>
