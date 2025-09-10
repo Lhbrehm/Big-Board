@@ -1,41 +1,37 @@
-/* Layout */
-body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#f4f6f8; margin:0; }
-h1 { text-align:center; margin:20px 0; }
-.container { width:90%; max-width:1200px; margin:20px auto; background:#fff; padding:18px 18px 8px; border-radius:14px; box-shadow: 0 6px 28px rgba(0,0,0,.06); }
-
-/* Table look */
-table.dataTable { width:100%; border-collapse:separate; border-spacing:0; }
-table.dataTable thead th { 
-  position: sticky; top: 0; z-index: 2; 
-  background:#ffffff; border-bottom:2px solid #e7edf3;
-  font-weight:700; color:#344054;
+/* Page background */
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%); /* dark blue gradient */
+  margin: 0;
+  color: #f1f5f9; /* light text */
 }
-table.dataTable tbody tr:hover { background:#f8fafc; }
-table.dataTable tbody td { border-top:1px solid #eef2f6; color:#1f2937; }
 
-/* Zebra rows */
-table.dataTable.stripe tbody tr:nth-child(odd) { background-color:#fbfdff; }
+/* Header */
+h1 {
+  text-align: center;
+  margin: 20px 0;
+  color: #facc15; /* gold accent */
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
 
-/* Alignments */
-th, td { vertical-align:top; }
-td.center, th.center { text-align:center; }
-td.right, th.right { text-align:right; }
+/* Container card */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.4);
+}
 
-/* Notes column: wrap nicely */
-td.notes { white-space:normal; line-height:1.35; max-width: 680px; }
+/* Table tweaks for contrast */
+table.dataTable thead th {
+  background: #f9fafb;
+  color: #111827;
+  border-bottom: 2px solid #e5e7eb;
+}
+table.dataTable tbody td {
+  color: #1f2937;
+}
 
-/* Small, subtle subtext (if you add any) */
-.subtle { color:#667085; font-size:12.5px; }
-
-/* Position badges */
-.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; font-weight:600; line-height:1.6; }
-.pos-QB { background:#fff3cd; color:#8a6d3b; border:1px solid #f6e3a6; }
-.pos-WR, .pos-TE { background:#e8f5ff; color:#0b6aa2; border:1px solid #c9e8ff; }
-.pos-OT { background:#efe9ff; color:#5a29b7; border:1px solid #d9ccff; }
-.pos-iOL, .pos-OL, .pos-DL { background:#f3f4f6; color:#374151; border:1px solid #e5e7eb; }
-.pos-ED, .pos-EDGE { background:#ffe8ec; color:#b42318; border:1px solid #ffd0d6; }
-.pos-LB { background:#eafbea; color:#146c2e; border:1px solid #c8efcc; }
-.pos-CB, .pos-SAF, .pos-S { background:#edf6ff; color:#155e75; border:1px solid #d7ebff; }
-
-/* Make table horizontally scrollable on small screens */
-.table-wrap { overflow-x:auto; }
