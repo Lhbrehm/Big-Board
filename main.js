@@ -1,6 +1,5 @@
-// If you're on TSV, set DELIM = "\t" and FILE = 'prospects.tsv'
 const FILE = 'prospects.csv';
-const DELIM = ","; // change to "\t" if TSV
+const DELIM = "\t";
 
 // Small cleanup for Notes
 const clean = s => String(s ?? "").replace(/\t/g, " ").trim();
