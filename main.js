@@ -52,6 +52,7 @@ Papa.parse(FILE, {
       if (link) {
         e.preventDefault();
         const notes = link.getAttribute('data-notes') || 'No notes yet.';
+        console.log('Notes clicked:', notes); // Add this line
         document.getElementById('notes-content').textContent = notes;
         document.getElementById('notes-modal').style.display = 'block';
       }
