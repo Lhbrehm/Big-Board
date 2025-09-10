@@ -8,7 +8,8 @@ const clean = s => String(s ?? "").replace(/\t/g, " ").trim();
 function rowHTML(r){
   return `
     <tr data-notes="${clean(r.Notes)}">
-      <td class="center">${r.Rank ?? ""}</td>
+    <td></td> <!-- expand control cell -->  
+    <td class="center">${r.Rank ?? ""}</td>
       <td>${r.Name ?? ""}</td>
       <td class="center">${r.Position ?? ""}</td>
       <td>${r.Usage ?? ""}</td>
