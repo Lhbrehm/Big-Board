@@ -52,8 +52,8 @@ Papa.parse(FILE, {
       if (link) {
         e.preventDefault();
         const notes = link.getAttribute('data-notes') || 'No notes yet.';
-        console.log('Notes clicked:', notes); // Add this line
         document.getElementById('notes-content').textContent = notes;
+        document.getElementById('modal-overlay').style.display = 'block';
         document.getElementById('notes-modal').style.display = 'block';
       }
     });
@@ -66,5 +66,6 @@ Papa.parse(FILE, {
 
 // Close modal
 document.querySelector('.close-x').addEventListener('click', () => {
+  document.getElementById('modal-overlay').style.display = 'none';
   document.getElementById('notes-modal').style.display = 'none';
 });
