@@ -14,6 +14,9 @@ function rowHTML(r){
       <td>${r.Usage ?? ""}</td>
       <td>${r.Archetype ?? ""}</td>
       <td>${r.School ?? ""}</td>
+      <td>
+        <button class="view-notes-btn" data-notes="${clean(r.Notes)}">View Notes</button>
+      </td>
     </tr>
   `;
 }
@@ -61,4 +64,18 @@ Papa.parse(FILE, {
     });
   },
   error: (err) => { console.error(err); alert('Failed to load data'); }
+});
+
+document.querySelector('#board tbody').addEventListener('click', (e) => {
+  const btn = e.target.closest('.view-notes-btn');
+  if (btn) {
+    const notes = btn.getAttribute('data-notes') || 'No notes yet.';
+    document.getElementById('notes-content').textContent = notes;
+    document.getElementById('notes-modal').style.display = 'block';
+  }
+});
+
+// Close modal
+document.getElementById('close-notes').addEventListener('click', () => {
+  document.getElementById('notes-modal').style.display = 'none';
 });
