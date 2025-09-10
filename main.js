@@ -3,6 +3,7 @@ Papa.parse('prospects.csv', {
   download: true,
   header: true,
   dynamicTyping: true,
+  delimiter: "\t",   // <-- tell PapaParse it's tab-separated
   complete: function(results) {
     const rows = results.data.filter(r => r && r.Name);
 
