@@ -8,13 +8,13 @@ const clean = s => String(s ?? "").replace(/\t/g, " ").trim();
 function rowHTML(r){
   return `
     <tr data-notes="${clean(r.Notes)}">
-      <td class="details-control"></td>
-      <td class="center">${r.Rank ?? ""}</td>
-      <td><a href="#" class="player-link" data-notes="${clean(r.Notes)}">${r.Name ?? ""}</a></td>
-      <td class="center">${r.Position ?? ""}</td>
-      <td>${r.Usage ?? ""}</td>
-      <td>${r.Archetype ?? ""}</td>
-      <td>${r.School ?? ""}</td>
+        <td class="details-control"></td>
+        <td class="center">${r.Rank ?? ""}</td>
+        <td><span class="player-link" data-notes="${(r.Notes ?? "").replace(/"/g, '&quot;')}">${r.Name ?? ""}</span></td>
+        <td class="center">${r.Position ?? ""}</td>
+        <td>${r.Usage ?? ""}</td>
+        <td>${r.Archetype ?? ""}</td>
+        <td>${r.School ?? ""}</td>
     </tr>
   `;
 }
@@ -53,7 +53,6 @@ Papa.parse(FILE, {
         e.preventDefault();
         const notes = link.getAttribute('data-notes') || 'No notes yet.';
         document.getElementById('notes-content').textContent = notes;
-        document.getElementById('modal-overlay').style.display = 'block';
         document.getElementById('notes-modal').style.display = 'block';
       }
     });
@@ -65,7 +64,6 @@ Papa.parse(FILE, {
 });
 
 // Close modal
-document.querySelector('.close-x').addEventListener('click', () => {
-  document.getElementById('modal-overlay').style.display = 'none';
+document.getElementById('close-notes').addEventListener('click', () => {
   document.getElementById('notes-modal').style.display = 'none';
 });
