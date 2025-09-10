@@ -11,9 +11,10 @@ Papa.parse('prospects.csv', {
       <tr>
         <td>${r.Rank ?? ''}</td>
         <td>${r.Name ?? ''}</td>
-        <td>${r.Pos ?? ''}</td>
+        <td>${r.Position ?? ''}</td>
+        <td>${r.Usage ?? ''}</td>
+        <td>${r.Archetype ?? ''}</td>
         <td>${r.School ?? ''}</td>
-        <td>${r.Overall ?? ''}</td>
         <td>${r.Notes ?? ''}</td>
       </tr>
     `).join('');
