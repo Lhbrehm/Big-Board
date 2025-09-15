@@ -64,6 +64,13 @@ Papa.parse(FILE, {
 });
 
 // Close modal
-document.getElementById('close-notes').addEventListener('click', () => {
-  document.getElementById('notes-modal').style.display = 'none';
+document.querySelector('.close-x').addEventListener('click', () => {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('notes-modal').style.display = 'none';
+});
+
+// Add click handler for overlay to close modal
+document.getElementById('modal-overlay').addEventListener('click', () => {
+    document.getElementById('modal-overlay').style.display = 'none';
+    document.getElementById('notes-modal').style.display = 'none';
 });
