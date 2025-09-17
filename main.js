@@ -4,19 +4,31 @@ const DELIM = "\t";
 // Small cleanup for Notes
 const clean = s => String(s ?? "").replace(/\t/g, " ").trim();
 
-// Build HTML row (with notes button)
-function rowHTML(r){
-  return `
-    <tr data-notes="${clean(r.Notes)}">
-        <td class="details-control"></td>
-        <td class="center">${r.Rank ?? ""}</td>
-        <td><span class="player-link" data-notes="${(r.Notes ?? "").replace(/"/g, '&quot;')}">${r.Name ?? ""}</span></td>
-        <td class="center">${r.Position ?? ""}</td>
-        <td>${r.Usage ?? ""}</td>
-        <td>${r.Archetype ?? ""}</td>
-        <td>${r.School ?? ""}</td>
-    </tr>
-  `;
+// Define columns to show and their properties
+const COLUMNS = {
+    Rank: { center: true, type: 'num' },
+    Name: { link: true },
+    Position: { center: true },
+    Usage: {},
+    Archetype: {},
+    School: {},
+    // Add new columns here in the future
+};
+
+// Build HTML row dynamically
+function rowHTML(r) {
+    return `
+        <tr data-notes="${clean(r.Notes)}">
+            <td class="details-control"></td>
+            ${Object.entries(COLUMNS).map(([col, props]) => {
+                const value = r[col] ?? "";
+                const content = props.link ? 
+                    `<span class="player-link" data-notes="${(r.Notes ?? "").replace(/"/g, '&quot;')}">${value}</span>` : 
+                    value;
+                return `<td${props.center ? ' class="center"' : ''}>${content}</td>`;
+            }).join('')}
+        </tr>
+    `;
 }
 
 Papa.parse(FILE, {
