@@ -4,75 +4,68 @@ const DELIM = "\t";
 // Small cleanup for Notes
 const clean = s => String(s ?? "").replace(/\t/g, " ").trim();
 
-// Define columns to show and their properties
-const COLUMNS = {
-    Rank: { center: true, type: 'num' },
-    Name: { link: true },
-    Position: { center: true },
-    Usage: {},
-    Archetype: {},
-    School: {},
-    // Add new columns here in the future
-};
+function generateHeaders(fields) {
+    // Filter out Notes from headers
+    const visibleFields = fields.filter(field => field !== 'Notes');
+    return `
+        <tr>
+            <th></th>  <!-- expand control -->
+            ${visibleFields.map(field => `<th>${field}</th>`).join('')}
+        </tr>
+    `;
+}
 
-// Build HTML row dynamically
-function rowHTML(r) {
+function rowHTML(r, fields) {
+    const visibleFields = fields.filter(field => field !== 'Notes');
     return `
         <tr data-notes="${clean(r.Notes)}">
             <td class="details-control"></td>
-            ${Object.entries(COLUMNS).map(([col, props]) => {
-                const value = r[col] ?? "";
-                const content = props.link ? 
-                    `<span class="player-link" data-notes="${(r.Notes ?? "").replace(/"/g, '&quot;')}">${value}</span>` : 
+            ${visibleFields.map(field => {
+                const value = r[field] ?? "";
+                const isName = field === 'Name';
+                const isCenter = ['Rank', 'Position'].includes(field);
+                const content = isName ? 
+                    `<a href="#" class="player-link">${value}</a>` : 
                     value;
-                return `<td${props.center ? ' class="center"' : ''}>${content}</td>`;
+                return `<td${isCenter ? ' class="center"' : ''}>${content}</td>`;
             }).join('')}
         </tr>
     `;
 }
 
 Papa.parse(FILE, {
-  download: true,
-  header: true,
-  delimiter: DELIM,
-  dynamicTyping: true,
-  skipEmptyLines: "greedy",
-  transformHeader: h => (h||"").trim(),
-  complete: (res) => {
-    const rows = res.data.filter(r => r && (r.Name || r.Rank));
-    const tbody = document.querySelector('#board tbody');
-    tbody.innerHTML = rows.map(rowHTML).join('');
+    download: true,
+    header: true,
+    delimiter: DELIM,
+    dynamicTyping: true,
+    skipEmptyLines: "greedy",
+    transformHeader: h => (h||"").trim(),
+    complete: (res) => {
+        const fields = res.meta.fields;
+        const rows = res.data.filter(r => r && (r.Name || r.Rank));
+        
+        // Generate headers
+        document.querySelector('#board thead').innerHTML = generateHeaders(fields);
+        
+        // Generate rows
+        document.querySelector('#board tbody').innerHTML = rows.map(r => rowHTML(r, fields)).join('');
 
-    // Initialize DataTable
-    const table = new DataTable('#board', {
-      paging: true,
-      pageLength: 25,
-      lengthChange: false,
-      searching: true,
-      ordering: true,
-      info: false,
-      order: [[1, 'asc']],
-      columnDefs: [
-        { targets: 0, orderable: false, className: 'details-control' },
-        { targets: [1,3], className: 'center' }
-      ]
-    });
-
-    // Handle clicks
-    tbody.addEventListener('click', (e) => {
-      const link = e.target.closest('.player-link');
-      if (link) {
-        e.preventDefault();
-        const notes = link.getAttribute('data-notes') || 'No notes yet.';
-        document.getElementById('notes-content').textContent = notes;
-        document.getElementById('notes-modal').style.display = 'block';
-      }
-    });
-  },
-  error: (err) => { 
-    console.error('Failed to load data:', err);
-    alert('Failed to load prospects data');
-  }
+        // Initialize DataTable
+        const table = new DataTable('#board', {
+            paging: true,
+            pageLength: 25,
+            lengthChange: false,
+            searching: true,
+            ordering: true,
+            info: false,
+            order: [[1, 'asc']],
+            columnDefs: [
+                { targets: 0, orderable: false, className: 'details-control' },
+                { targets: 1, type: 'num' }
+            ]
+        });
+    },
+    error: (err) => { console.error(err); alert('Failed to load data'); }
 });
 
 // Close modal
