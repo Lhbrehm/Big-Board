@@ -4,36 +4,6 @@ const DELIM = "\t";
 // Small cleanup for Notes
 const clean = s => String(s ?? "").replace(/\t/g, " ").trim();
 
-function generateHeaders(fields) {
-    console.log('Headers being generated:', fields); // Debug log
-    const visibleFields = fields.filter(field => field !== 'Notes');
-    return `
-        <tr>
-            <th></th>
-            ${visibleFields.map(field => `<th>${field}</th>`).join('')}
-        </tr>
-    `;
-}
-
-function rowHTML(r, fields) {
-    const visibleFields = fields.filter(field => field !== 'Notes');
-    const row = `
-        <tr data-notes="${clean(r.Notes)}">
-            <td class="details-control"></td>
-            ${visibleFields.map(field => {
-                const value = r[field] ?? "";
-                return `<td${field === 'Rank' || field === 'Position' ? ' class="center"' : ''}>${
-                    field === 'Name' 
-                        ? `<a href="#" class="player-link">${value}</a>` 
-                        : value
-                }</td>`;
-            }).join('')}
-        </tr>
-    `;
-    console.log('Row cell count:', (row.match(/<td/g) || []).length); // Debug log
-    return row;
-}
-
 // Build HTML row (with notes button)
 function rowHTML(r){
   return `
@@ -57,18 +27,10 @@ Papa.parse(FILE, {
   skipEmptyLines: "greedy",
   transformHeader: h => (h||"").trim(),
   complete: (res) => {
-    const fields = res.meta.fields;
     const rows = res.data.filter(r => r && (r.Name || r.Rank));
-    
-    const thead = document.querySelector('#board thead');
     const tbody = document.querySelector('#board tbody');
-    
-    thead.innerHTML = generateHeaders(fields);
-    tbody.innerHTML = rows.map(r => rowHTML(r, fields)).join('');
-    
-    console.log('Header count:', thead.querySelectorAll('th').length); // Debug log
-    console.log('First row cell count:', tbody.querySelector('tr').querySelectorAll('td').length); // Debug log
-    
+    tbody.innerHTML = rows.map(rowHTML).join('');
+
     // Initialize DataTable
     const table = new DataTable('#board', {
       paging: true,
