@@ -12,14 +12,31 @@ async function getPFFRanks() {
         version: '3'
     });
     
+    const headers = {
+        "accept": "application/json, text/plain, */*",
+        "sec-ch-ua": '"Chromium";v="140", "Not=A?Brand";v="24", "Google Chrome";v="140"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"Windows"',
+        "accept-language": "en-US,en;q=0.9",
+        "referer": "https://www.pff.com/draft/big-board?season=2026",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+    };
+    
     try {
-        const response = await fetch(`${PFF_API}?${params}`);
+        const response = await fetch(`${PFF_API}?${params}`, { headers });
         const data = await response.json();
-        // Create map of name -> rank
-        return data.reduce((map, player) => {
-            map[player.name] = player.rank;
-            return map;
-        }, {});
+        
+        // Match Python logic for processing players
+        const pffRanks = {};
+        if (data.players) {
+            data.players.forEach((p, idx) => {
+                pffRanks[p.name] = idx + 1; // 1-based rank
+            });
+        }
+        return pffRanks;
     } catch (error) {
         console.error('Failed to fetch PFF data:', error);
         return {};
